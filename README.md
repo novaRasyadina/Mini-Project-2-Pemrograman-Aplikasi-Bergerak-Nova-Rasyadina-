@@ -139,4 +139,167 @@ home: supabase.auth.currentSession != null
 untuk cek apakah ada sesi login yang sedang aktif. jika sudah login langsung ke HomeScreen, jika belum ke LoginScreen.
 
 #### Package models: journal.dart
+```dart
+class Journal {
+  final String? id;
+  final String title;
+  final String date;
+  final String content;
+  final String mood;
+  final String? userId;
+```
+Class model yang merepresentasikan satu data jurnal. id dan userId bersifat nullable karena saat membuat jurnal baru id belum ada atau dibuat otomatis oleh supabase.
+
+```dart
+  Journal({
+    this.id,
+    required this.title,
+    required this.date,
+    required this.content,
+    this.mood = '😊',
+    this.userId,
+  });
+```
+Constructor dengan required pada field wajib. mood memiliki nilai default '😊' jika tidak diisi. id dan userId opsional karena tidak selalu tersedia.
+
+```dart
+ factory Journal.fromMap(Map<String, dynamic> map) {
+    return Journal(
+      id: map['id']?.toString(),
+      title: map['title'] ?? '',
+      date: map['date'] ?? '',
+      content: map['content'] ?? '',
+      mood: map['mood'] ?? '😊',
+      userId: map['user_id']?.toString(),
+    );
+  }
+```
+fromMap() mengubah data mentah dari Supabase (berupa Map) menjadi objek Journal. kemudian operator "??" memberikan nilai default jika data dari Supabase kosong atau null.
+
+```dart
+Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'date': date,
+      'content': content,
+      'mood': mood,
+      'user_id': userId,
+    };
+  }
+}
+```
+toMap() adalah kebalikan dari fromMap, yang mengubah objek journal menjadi Map untuk dikirim ke supabase saat insert atau update data.
+
+#### Package Controllers: theme_controller.dart
+```dart
+class ThemeController extends GetxController {
+  var isDark = false.obs;
+```
+Extends GetxController agar bisa menggunakan fitur reaktif GetX dan lifecycle management seperti onInit() dan onClose(). selanjutnya Variabel reaktif (.obs) yang menyimpan status tema. false = Light Mode (default). Karena reaktif, setiap perubahan nilai otomatis memperbarui semua widget yang menggunakan nilai ini.
+
+```dart
+ void toggleTheme() {
+    isDark.value = !isDark.value;
+    Get.changeThemeMode(isDark.value ? ThemeMode.dark : ThemeMode.light);
+  }
+}
+```
+kode di atas digunakan untuk beralih tema. !isDark.value membalik nilai boolean. Get.changeThemeMode() langsung menerapkan tema baru ke seluruh aplikasi tanpa perlu restart.
+
+#### Package Constrollers: journal_controller.dart
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
+
+```dart
+```
 
