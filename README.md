@@ -337,7 +337,7 @@ class _LoginScreenState extends State<LoginScreen> {
 _formKey untuk mengontrol validasi form. _emailCtrl dan _passCtrl untuk mengambil nilai input email dan password. _isLoading untuk menampilkan loading saat proses login. _obscure untuk menyembunyikan/menampilkan password.
 
 ```dart
-
+ 
 ```
 
 ```dart
