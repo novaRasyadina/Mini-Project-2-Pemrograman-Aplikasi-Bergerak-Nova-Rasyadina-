@@ -314,94 +314,926 @@ kode di atas adalah ntuk menghapus jurnal dari supabase. user_id disertakan untu
 
 ####  Package Screens: login_screen.dart
 ```dart
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../main.dart';
-import 'home_screen.dart';
-import 'register_screen.dart';
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+```
+menggunakan StatefulWidget karena halaman login memiliki state yang berubah seperti status loading dan toggle visibility password. _LoginScreenState adalah class yang menyimpan semua logika dan state halaman ini. 
 
+```dart
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   bool _isLoading = false;
   bool _obscure = true;
+
+  static const kDark = Color(0xFF1A1A2E);
+  static const kAccent = Color(0xFFE07A5F);
+  static const kMuted = Color(0xFF9A9A9A);
 ```
-_formKey untuk mengontrol validasi form. _emailCtrl dan _passCtrl untuk mengambil nilai input email dan password. _isLoading untuk menampilkan loading saat proses login. _obscure untuk menyembunyikan/menampilkan password.
+_formKey digunakan untuk mengakses dan memvalidasi semua field dalam form sekaligus. _emailCtrl dan _passCtrl mengontrol dan membaca nilai input email dan password. _isLoading menyimpan status apakah proses login sedang berjalan. _obscure menyimpan status apakah password disembunyikan, defaultnya true. kDark, kAccent, kMuted adalah konstanta warna yang dipakai di seluruh halaman ini.
 
 ```dart
- 
+ Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+    try {
+      await supabase.auth.signInWithPassword(
+        email: _emailCtrl.text.trim(),
+        password: _passCtrl.text,
+      );
+      Get.offAll(() => const HomeScreen(), transition: Transition.fadeIn);
+    } catch (e) {
+      Get.snackbar(
+        'Login Gagal',
+        'Email atau password salah.',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(12),
+        borderRadius: 14,
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 ```
+_formKey.currentState!.validate() memeriksa semua field sebelum melakukan login, jika ada yang tidak valid fungsi berhenti dan menampilkan pesan error di bawah field. setState(() => _isLoading = true) mengaktifkan loading spinner di tombol. supabase.auth.signInWithPassword() mengirim request autentikasi ke Supabase. .trim() menghapus spasi tidak sengaja di awal atau akhir email. Get.offAll() mengganti seluruh navigation stack dengan HomeScreen menggunakan animasi fade sehingga user tidak bisa kembali ke halaman login dengan tombol back. catch menangkap error jika login gagal dan menampilkan snackbar merah. finally selalu mematikan loading spinner baik berhasil maupun gagal.
+
+```dart
+ Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bg = isDark ? const Color(0xFF121212) : const Color(0xFFF5F0EB);
+    final cardBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final textColor = isDark ? Colors.white : kDark;
+```
+Cek tema aktif saat ini dan menetaapkan warna yang sesuai. bg adalah warna background halamn, cardBg adalah warna background field input, dan textColor adalah warna teks. semua warna berubah otomatis mengikuti tema light atau dark.
+
+```dart
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: cardBg,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          // ignore: deprecated_member_use
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 20,
+                        )
+                      ],
+                    ),
+                    child: const Text('📖', style: TextStyle(fontSize: 48)),
+                  ),
+                ),
+```
+Logo aplikasi berupa emoji buku yang ditampilkan di dalam lingkaran dengan shadow halus. BoxShape.circle membuat Container berbentuk lingkaran sempurna. Ditampilkan di bagian atas halaman login sebagai identitas visual aplikasi.
+
+```dart
+     // Email
+                _buildLabel('Email', textColor),
+                const SizedBox(height: 6),
+                _buildField(
+                  controller: _emailCtrl,
+                  hint: 'email@example.com',
+                  cardBg: cardBg,
+                  textColor: textColor,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (v) =>
+                      v!.isEmpty ? 'Masukkan email' : null,
+                ),
+                const SizedBox(height: 16),
+
+                // Password
+                _buildLabel('Password', textColor),
+                const SizedBox(height: 6),
+                _buildField(
+                  controller: _passCtrl,
+                  hint: '••••••••',
+                  cardBg: cardBg,
+                  textColor: textColor,
+                  obscure: _obscure,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: kMuted, size: 20,
+                    ),
+                    onPressed: () => setState(() => _obscure = !_obscure),
+                  ),
+                  validator: (v) =>
+                      v!.length < 6 ? 'Minimal 6 karakter' : null,
+                ),
+                const SizedBox(height: 28),
+
+```
+memanggil fungsi helper _buildLabel() untuk label dan _buildField() untuk field input. field email menggunakan keyboardType: TextInputType.emailAddress agar keyboard menampilkan tombol @. field password menggunakan obscure: _obscure untuk menyembunyikan teks dan suffixIcon berupa tombol toggle visibility. validator pada password mengecek minimal 6 karakter.
+
+```dart
+  SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kDark,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2)
+                        : const Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+```
+Tombol login dengan lebar penuh double.infinity dan tinggi 52px. onPressed: _isLoading ? null : _login menonaktifkan tombol saat proses login berlangsung dengan memberikan null. menampilkan CircularProgresIndicator saat loading dan teks "Login" saat tidak ada proses. elevation: 0 menghilangkan shadow bawaan tombol untuk tampilan datar/flat.
+
+```dart
+          Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // ignore: prefer_const_constructors
+                      Text("Belum punya akun? ",
+                          // ignore: prefer_const_constructors
+                          style: TextStyle(color: kMuted)),
+                      GestureDetector(
+                        onTap: () => Get.to(
+                          () => const RegisterScreen(),
+                          transition: Transition.rightToLeft,
+                        ),
+                        child: const Text(
+                          'Daftar',
+                          style: TextStyle(
+                            color: kAccent,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+```
+baris teks dibagian bawah yang mengajak user mendaftar jika belum memiliki akun. GestureDetector membungkus teks "Daftar" agar bisa diklik untuk navigasi ke RegisterScreen dengan animasi slide dari kanan ke kiri. mainAxisSize: MainAxisSize.min membuat Row hanya selebar kontennya saja.
+
+```dart
+Widget _buildLabel(String text, Color textColor) => Text(
+        text,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: textColor,
+          letterSpacing: 0.4,
+        ),
+      );
+```
+Fungsi helper untuk membuat label kecil di atas setiap field input. letterSpacing: 0.4 memberikan sedikit jarak antar huruf agar label terlihat lebih rapi. dibuat sebagai fungsi terpisah agar tidak ada duplikasi kode karena setiap label memiliki tampilan yang sama.
+
+```dart
+ Widget _buildField({
+    required TextEditingController controller,
+    required String hint,
+    required Color cardBg,
+    required Color textColor,
+    TextInputType? keyboardType,
+    bool obscure = false,
+    Widget? suffixIcon,
+    String? Function(String?)? validator,
+  }) =>
+      Container(
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            // ignore: deprecated_member_use
+            BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)
+          ],
+        ),
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscure,
+          keyboardType: keyboardType,
+          style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xFF9A9A9A)),
+            border: InputBorder.none,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            suffixIcon: suffixIcon,
+          ),
+          validator: validator,
+        ),
+      );
+```
+fungsi helper di sini untuk membuat field input yang konsisten tampilannya. parameter required wajib diisi sedangkan keyboardType, obscure, suffixIcon, dan validator bersifat opsinonal dengan nilai default. obscureText: obscure menyembunyikan teks password jika bernilai true. border: InputBorder.none menghilangkan garis bawah bawaan dari flutter. boxShadow memberikan efek shadow halus agar field terlihat melayang. fungsi ini digunakan ulang untuk field email dan password agar tampilan konsisten tanpa duplikasi kode.
+
+```dart
+@override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    super.dispose();
+  }
+}
+```
+dispose() wajib dipanggil untuk membersihkan kedua controller dari memori saat halaman ditutup untuk mencegah memory leak.
+
+#### Package Screen: regiter_screen.dart
+
+```dart
+ final _formKey = GlobalKey<FormState>();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  final _confirmCtrl = TextEditingController();
+  bool _isLoading = false;
+  bool _obscure = true;
+  bool _obscureConfirm = true;
+
+  static const kDark = Color(0xFF1A1A2E);
+  static const kAccent = Color(0xFFE07A5F);
+  static const kMuted = Color(0xFF9A9A9A);
+```
+Tiga controller untuk email, password, dan konfirmasi password. dua variabel _obscure yang terpisah yaitu _obscure untuk field password dan _obscureConfirm untuk field konfirmasi sehingga bisa di toggle secara independen satu sama lain.
+
+```dart
+  Future<void> _register() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isLoading = true);
+    try {
+      await supabase.auth.signUp(
+        email: _emailCtrl.text.trim(),
+        password: _passCtrl.text,
+      );
+      Get.back();
+      Get.snackbar(
+        'Registrasi Berhasil! 🎉',
+        'Akun berhasil dibuat. Silahkan login.',
+        backgroundColor: kDark,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(12),
+        borderRadius: 14,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Registrasi Gagal',
+        'Email mungkin sudah terdaftar.',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(12),
+        borderRadius: 14,
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+```
+supabase.auth.signUp() membuat akun baru di Supabase Auth. emai dan password langsung dikirim ke supabase tanpa perlu enkripsi manual karena supabase menanganinya secara otomatis. setelah berhasil Get.back() kembali ke halaman login dan snackbar sukses ditampilkan dengan warna gelap. catch menangkap error jika registrasi gagal biasanya karena email sudah terdaftar dan menampilkan snackbar merah. finally selalu mematikan loading spinner setelah proses selesai.
+
+```dart
+ IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(Icons.arrow_back_ios_rounded, color: textColor),
+                ),
+```
+Tombol kembali di pojok kiri atas menggunakan ikon panah arrow_back_ios_rounded. Get.back() kembali ke halaman login. warna ikon menyesuaikan tema aktif melalui textColor.
+
+```dart
+ Text(
+                  'Create Account',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    color: textColor,
+                    letterSpacing: -0.8,
+                  ),
+                ),
+                // ignore: prefer_const_constructors
+                Text(
+                  'Start your journaling journey',
+                  // ignore: prefer_const_constructors
+                  style: TextStyle(fontSize: 14, color: kMuted),
+                ),
+                const SizedBox(height: 32),
+```
+judul halaman register dengan font beasr 28px tebal dan subtitle yang lebih kecil dan berwarna muted. letterSpacing: -0.8 memberikan tampilan heading yang lebih tegas dengan jarak antar huruf yang sedikit lebih rapat.
+
+```dart
+_buildField(
+                  controller: _confirmCtrl,
+                  hint: '••••••••',
+                  cardBg: cardBg,
+                  textColor: textColor,
+                  obscure: _obscureConfirm,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirm
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: kMuted,
+                      size: 20,
+                    ),
+                    onPressed: () =>
+                        setState(() => _obscureConfirm = !_obscureConfirm),
+                  ),
+                  validator: (v) => v != _passCtrl.text
+                      ? 'Password tidak cocok'
+                      : null,
+                ),
+                const SizedBox(height: 28),
+```
+Field konfirmasi password yang membandingkan nilainya dengan field password utama. validator mengecek apakah isi field konfirmasi sama dengan _passCtrl.text, jika berbeda menampilkan pesan "Password tidak cocok". _obscureConfirm dikontrol terpisah dari _obscure agar user bisa toggle visibility kedua field secara independen.
+
+```dart
+SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _register,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kAccent,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2)
+                        : const Text(
+                            'Daftar Sekarang',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+```
+Tombol daftar dengan warna aksen terracotta kAccent yang berbeda dari tombol login yang berwarna gelap, memberi identitas visual berbeda antara dua halaman ini. sama seperti tombol login, menampilkan loading spinner saat proses berlangsung dan teks "Daftar Sekarang" saat tidak ada proses.
+
+```dart
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    _confirmCtrl.dispose();
+    super.dispose();
+  }
+}
+```
+membersihkan ketiga controller dari memori saatt haalaman ditutup. di halaman register ada tiga controller yang harus di dispose berbeda dengan halaman login yang hanya dua.
+
+#### Package Screens: home_screen.dart
+```dart
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  static const kAccent = Color(0xFFE07A5F);
+  static const kTag = Color(0xFFFFF0EC);
+  static const kMuted = Color(0xFF9A9A9A);
+```
+menggunakan StatelessWidget karena state dikelola sepenuhnya oleh JournalController dan ThemeController dari GetX, tidak ada state lokal di halaman ini. kTag adalah warna latar blok tanggal di kartu jurnal.
+
+```dart
+Widget build(BuildContext context) {
+    final JournalController ctrl = Get.put(JournalController());
+    final ThemeController themeCtrl = Get.find();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final kDark = isDark ? Colors.white : const Color(0xFF1A1A2E);
+    final bg = Theme.of(context).scaffoldBackgroundColor;
+    final cardBg = Theme.of(context).cardColor;
+```
+Get.put() mendaftarkan dan membuat instance JournalController pertama kali. Get.find() mengambil ThemeController yang sudah ada. isDark mengecek tema aktif untuk menentukan warna yang dipakai. bg dan cardBg diambil dari ThemeData yang sudah didefinisikan di main.dart agar konsisten dengan tema.
+
+```dart
+    final now = DateTime.now();
+    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    final days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+```
+Mengambil tanggal dan waktu saat ini. Array months dan days mengkonversi angka bulan dan hari dari DateTime menjadi nama singkat yang lebih mudah dibaca.
+
+```dart
+Text(
+                        '${days[now.weekday - 1]}, ${months[now.month - 1]} ${now.day}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: kAccent,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'My Journal',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                          color: kDark,
+                          letterSpacing: -0.8,
+                        ),
+                      ),
+                    ],
+                  ),
+```
+Header menampilkan hari dan tanggal hari ini dengan warna aksen di atas judul "My Journal" yang lebih besar dan tebal. now.weekday - 1 karena index array mulai dari 0 sedangkan weekday dari Flutter mulai dari 1 untuk Senin. now.month - 1 dengan alasan yang sama.
+
+```dart
+  Obx(() => IconButton(
+                    onPressed: themeCtrl.toggleTheme,
+                    icon: Icon(
+                      themeCtrl.isDark.value
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                      color: kDark,
+                    ),
+                    style: IconButton.styleFrom(
+                      backgroundColor: cardBg,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  )),
+                  const SizedBox(width: 8),
+                  // Logout
+                  IconButton(
+                    onPressed: () => _showLogoutDialog(context),
+                    icon: Icon(Icons.logout_rounded, color: kDark),
+                    style: IconButton.styleFrom(
+                      backgroundColor: cardBg,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+```
+dua tombol di pojok kanan header. tombol pertama dibungkus Obx() agar ikon berubah reaktif antara matahari dan bulan sesuai tema aktif. tombol kedua untuk logout yang membuka dialog konfirmasi. keduanya memiliki background cardBg dan sudut membulat agar tampak konsisten.
+
+```dart
+ Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+              child: Row(
+                children: [
+                  // ignore: prefer_const_constructors
+                  Icon(Icons.person_outline, size: 14, color: kMuted),
+                  const SizedBox(width: 4),
+                  Text(
+                    supabase.auth.currentUser?.email ?? '',
+                    style: const TextStyle(fontSize: 12, color: kMuted),
+                  ),
+                  const Spacer(),
+                  Obx(() => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF2A2A2A) : const Color(0xFF1A1A2E),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${ctrl.journals.length} Journal',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+```
+Baris di bawah header menampilkan email user yang sedang login di sebelah kiri dengan ikon orang. di sebelah kanan ada badge yang menampilkan jumlah jurnal secara reaktif menggunakan Obx() sehingga angka otomatis update setiap kali jurnal ditambah atau dihapus. supabase.auth.currentUser?.email ?? '' mengambil email dengan aman tanpa crash jika currentUser null.
+
+```dart
+ Expanded(
+              child: Obx(() {
+                if (ctrl.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: kAccent),
+                  );
+                }
+                if (ctrl.journals.isEmpty) {
+                  return _empty(kDark, cardBg);
+                }
+                return RefreshIndicator(
+                  color: kAccent,
+                  onRefresh: ctrl.fetchJournals,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
+                    itemCount: ctrl.journals.length,
+                    itemBuilder: (_, i) => _card(
+                      ctrl.journals[i],
+                      i,
+                      ctrl,
+                      context,
+                      kDark,
+                      cardBg,
+                      isDark,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+```
+Expanded membuat area list mengisi sisa ruang layar. Obx() membuat seluruh area reaktif terhadap perubahan data. tiga kondisi ditampilkan secara bergantian yaitu loading spinner saat data dimuat, halaman kosong jika tidak ada jurnal, atau list jurnal jika ada data. RefreshIndicator memungkinkan pull-to-refresh. ListView.builder hanya membangun widget yang terlihat di layar sehingga efisien untuk data yang banyak. padding bottom: 80 memberi ruang agar kartu terakhir tidak tertutup FAB.
+
+```dart
+floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Get.to(
+          () => const FormScreen(),
+          transition: Transition.downToUp,
+        ),
+        backgroundColor: const Color(0xFF1A1A2E),
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.edit_outlined),
+        label: const Text('New Journal', style: TextStyle(fontWeight: FontWeight.w700)),
+      ),
+    );
+  }
+```
+FloatingActionButton.extended di pojok kanan bawah dengan ikon pensil dan label "New Journal". Saat ditekan navigasi ke FormScreen tanpa membawa data jurnal artinya mode tambah baru. transition: Transition.downToUp memberikan animasi slide dari bawah ke atas.
+```dart
+void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.w800)),
+        content: const Text('Yakin ingin keluar dari akun?'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Batal', style: TextStyle(color: kMuted)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await supabase.auth.signOut();
+              Get.offAll(() => const LoginScreen(), transition: Transition.fadeIn);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1A1A2E),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Logout', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+```
+Dialog konfirmasi logout. Jika user memilih Batal dialog ditutup dan user tetap di Home. Jika user memilih Logout maka supabase.auth.signOut() mengakhiri session aktif di Supabase dan Get.offAll() membersihkan seluruh navigation stack lalu kembali ke LoginScreen dengan animasi fade sehingga user tidak bisa kembali ke Home dengan tombol back.
+
+```dart
+Widget _empty(Color kDark, Color cardBg) => Center(
+    child: Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(
+        padding: const EdgeInsets.all(28),
+        decoration: BoxDecoration(color: cardBg, shape: BoxShape.circle),
+        child: const Text('📖', style: TextStyle(fontSize: 44)),
+      ),
+      const SizedBox(height: 20),
+      Text('Start your story',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kDark)),
+      const SizedBox(height: 6),
+      const Text('Write your first journal', style: TextStyle(fontSize: 14, color: kMuted)),
+    ]),
+  );
+```
+Widget halaman kosong yang ditampilkan saat belum ada jurnal. emoji buku ditampilkan di dalam lingkaran, diikuti teks ajakan menulis jurnal pertama. mainAxisSize: MainAxisSize.min membuat Column hanya sebesar kontennya saja tidak memenuhi seluruh layar.
+
+```dart
+ Widget _card(
+    Journal j,
+    int i,
+    JournalController ctrl,
+    BuildContext context,
+    Color kDark,
+    Color cardBg,
+    bool isDark,
+  ) {
+    final parts = j.date.split('-');
+    final months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    final tagColor = isDark ? const Color(0xFF2D2020) : kTag;
+```
+Fungsi yang membangun tampilan kartu untuk setiap jurnal. j.date.split('-') memecah string tanggal format YYYY-MM-DD menjadi array ['YYYY','MM','DD']. index 0 di array months dikosongkan karena bulan dimulai dari 1. tagColor berubah antara warna gelap kemerahan di Dark Mode dan warna krem terang di Light Mode.
+
+```dart
+    return Dismissible(
+      key: ValueKey(j.id ?? '$i${j.title}'),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (_) async {
+        return await _showDeleteDialog(context);
+      },
+      onDismissed: (_) async {
+        await ctrl.deleteJournal(j.id!);
+        Get.snackbar(
+          'Dihapus',
+          '"${j.title}" berhasil dihapus.',
+          backgroundColor: const Color(0xFF1A1A2E),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.all(12),
+          borderRadius: 14,
+        );
+      },
+```
+Dismissible membungkus setiap kartu untuk fitur swipe-to-delete. key: ValueKey(j.id) menggunakan id unik dari Supabase sebagai key. direction: endToStart hanya mengizinkan swipe dari kanan ke kiri. confirmDismiss menampilkan dialog konfirmasi terlebih dahulu sebelum menghapus, jika user memilih Batal kartu kembali ke posisi semula. onDismissed dipanggil setelah konfirmasi dan menghapus data dari Supabase lalu menampilkan snackbar notifikasi.
+
+```dart
+  background: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.redAccent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 22),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
+      ),
+```
+Latar belakang merah dengan ikon tempat sampah yang terlihat saat user melakukan swipe ke kiri. alignment: Alignment.centerRight memposisikan ikon di kanan karena arah swipe dari kanan ke kiri.
+
+```dart
+ child: GestureDetector(
+        onTap: () => Get.to(
+          () => FormScreen(journal: j),
+          transition: Transition.downToUp,
+        ),
+```
+GestureDetector mendeteksi tap pada kartu untuk navigasi ke FormScreen dalam mode edit. FormScreen(journal: j) mengirim data jurnal yang dipilih sehingga semua field di form terisi otomatis dengan data yang sudah ada.
+
+```dart
+child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              )
+            ],
+          ),
+```
+Container kartu jurnal dengan sudut membulat radius 20, warna background sesuai tema, dan shadow dengan offset ke bawah yang memberikan kesan kartu melayang di atas background.
+
+```dart
+ Container(
+                width: 50,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: tagColor,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Column(children: [
+                  Text(
+                    parts.length > 2 ? parts[2] : '',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: kDark,
+                      height: 1,
+                    ),
+                  ),
+                  Text(
+                    parts.length > 1
+                        ? months[int.tryParse(parts[1]) ?? 0]
+                        : '',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: kAccent,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ]),
+              ),
+```
+Blok tanggal di sebelah kiri kartu berukuran 50x50. Menampilkan angka tanggal besar di atas dan nama bulan singkat kecil di bawah. parts[2] adalah tanggal (DD) dan parts[1] adalah bulan (MM) yang dikonversi ke nama menggunakan array months. int.tryParse() mengkonversi string bulan ke integer dengan aman tanpa crash jika gagal.
+
+```dart
+Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Expanded(
+                        child: Text(
+                          j.title,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: kDark,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(j.mood, style: const TextStyle(fontSize: 20)),
+                    ]),
+                    const SizedBox(height: 5),
+                    Text(
+                      j.content,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: kMuted,
+                        height: 1.5,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 10),
+                    // ignore: prefer_const_literals_to_create_immutables, prefer_const_constructors
+                    Row(children: [
+                      const Icon(Icons.touch_app_outlined, size: 12, color: kMuted),
+                      const SizedBox(width: 3),
+                      const Text('Tap to edit',
+                          style: TextStyle(fontSize: 11, color: kMuted)),
+                      const SizedBox(width: 14),
+                      const Icon(Icons.swipe_left_outlined, size: 12, color: kMuted),
+                      const SizedBox(width: 3),
+                      const Text('Swipe to delete',
+                          style: TextStyle(fontSize: 11, color: kMuted)),
+                    ]),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+```
+Area konten card di sebelah kanan blok tanggal. Baris pertama menampilkan judul jurnal dan emoji mood secara berdampingan. maxLines: 1 dan overflow: TextOverflow.ellipsis memastikan judul tidak lebih dari satu baris dan menampilkan "..." jika terlalu panjang. di bawahnya preview dua baris isi jurnal dengan warna muted. paling bawah ada hint visual kecil yang memberi tahu user cara berinteraksi dengan kartu.
+
+```dart
+Future<bool?> _showDeleteDialog(BuildContext context) {
+    return Get.dialog<bool>(
+      AlertDialog(
+        title: const Text('Hapus Journal',
+            style: TextStyle(fontWeight: FontWeight.w800)),
+        content: const Text('Apakah kamu yakin ingin menghapus jurnal ini? Tindakan ini tidak bisa dibatalkan.'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text('Batal', style: TextStyle(color: kMuted)),
+          ),
+          ElevatedButton(
+            onPressed: () => Get.back(result: true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Hapus', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+Dialog konfirmasi hapus yang mengembalikan nilai bool. Get.dialog<bool> menampilkan dialog dan menunggu hasilnya. Get.back(result: false) jika user memilih Batal sehingga kartu kembali ke posisi semula. Get.back(result: true) jika user memilih Hapus sehingga onDismissed dijalankan. Pesan "tidak bisa dibatalkan" memberi warning kepada user bahwa data akan hilang permanen dari Supabase.
+
+#### Package Screens: form_screen.dart
+```dart
+class FormScreen extends StatefulWidget {
+  final Journal? journal;
+  const FormScreen({super.key, this.journal});
+
+  @override
+  State<FormScreen> createState() => _FormScreenState();
+}
+```
+journal bersifat nullable (?). Jika null berarti halaman dibuka untuk tambah jurnal baru. Jika berisi data jurnal berarti untuk edit. dengan cara ini satu halaman digunakan untuk dua fungsi sekaligus yaitu Create dan Update.
+
+```dart
+class _FormScreenState extends State<FormScreen> {
+  final _form = GlobalKey<FormState>();
+  late final TextEditingController _title, _date, _content;
+  String _mood = '😊';
+  bool _isSaving = false;
+
+  final _moods = ['😊','😢','😤','😴','🥰','😰','🤩','😌'];
+
+  static const kAccent = Color(0xFFE07A5F);
+  static const kMuted = Color(0xFF9A9A9A);
+```
+_form adalah kunci untuk mengakses state form dan menjalankan validasi semua field sekaligus. late artinya controller diinisialisasi nanti di initState(). _mood menyimpan emoji mood yang dipilih dengan default '😊'. _isSaving mencegah double submit saat proses simpan berlangsung. _moods adalah daftar 8 emoji yang tersedia untuk dipilih.
+
+```dart
+ @override
+  void initState() {
+    super.initState();
+    final j = widget.journal;
+    _title   = TextEditingController(text: j?.title ?? '');
+    _date    = TextEditingController(text: j?.date ?? '');
+    _content = TextEditingController(text: j?.content ?? '');
+    _mood    = j?.mood ?? '😊';
+  }
+```
+initState() dipanggil sekali saat halaman pertama dibuat. Jika untuk edit semua field diisi dengan data jurnal yang ada menggunakan j?.title. jika untuk tambah baru semua field kosong karena ?? '' memberikan string kosong sebagai default.
+
+```dart
+@override
+  void dispose() {
+    _title.dispose(); _date.dispose(); _content.dispose();
+    super.dispose();
+  }
+```
+dispose() wajib dipanggil karena berfungsi untuk membersihkan ketiga controller dari memori saat halaman ditutup untuk mencegah memory leak.
+
+```dart
+Future<void> _pickDate() async {
+    final d = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: const ColorScheme.light(primary: Color(0xFF1A1A2E)),
+        ),
+        child: child!,
+      ),
+    );
+    if (d != null) _date.text = d.toString().substring(0, 10);
+  }
+```
+showDatePicker() menampilkan dialog kalender bawaan Flutter. initialDate: DateTime.now() membuka kalender di tanggal hari ini. builder mengubah warna header kalender agar sesuai tema aplikasi. d.toString().substring(0, 10) mengambil hanya bagian YYYY-MM-DD dari string DateTime yang lengkap.
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
 
 ```dart
 ```
 
-```dart
-```
-
-```dart
-```
-
-```dart
-```
-
-```dart
-```
-
-```dart
-```
-
-```dart
-```
 
 ```dart
 ```
