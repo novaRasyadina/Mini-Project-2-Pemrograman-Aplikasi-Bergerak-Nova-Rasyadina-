@@ -208,23 +208,111 @@ kode di atas digunakan untuk beralih tema. !isDark.value membalik nilai boolean.
 
 #### Package Constrollers: journal_controller.dart
 ```dart
+class JournalController extends GetxController {
+  var journals = <Journal>[].obs;
+  var isLoading = false.obs;
 ```
+journal di sini sebagai list yang menyimpan semua data jurnal, UI otomatis update saat list nya berubah. isLoading digunakan untuk menampilkan loading indicator saat data sedang diambil.
 
 ```dart
+@override
+  void onInit() {
+    super.onInit();
+    fetchJournals();
+  }
 ```
+onInit() dipanggil otomatis saat controller pertama kali dibuat. di sini langsung memaanggil fetchJournals() agar data jurnal langsung dimuat ketika halaman home dibuka.
 
 ```dart
+ Future<void> fetchJournals() async {
+    try {
+      isLoading.value = true;
+      final userId = supabase.auth.currentUser!.id;
+      final data = await supabase
+          .from('journals')
+          .select()
+          .eq('user_id', userId)
+          .order('date', ascending: false);
+
+      journals.value = (data as List).map((e) => Journal.fromMap(e)).toList();
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal memuat data: $e',
+          // ignore: prefer_const_constructors
+          backgroundColor: Color(0xFFE07A5F),
+          colorText: Colors.white);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 ```
+pada kode di atas digunakan untuk mengambil semua jurnal milik user dari supabase. .eq('user_id', userId) memastikan hanya jurnal milik user yang login diambil, .order('date', ascending: false) mengurutkan terbaaru yang di atas. try-catch-finally menangani error dan memastikan isLoading selalu dimatikan setelah selesai.
 
 ```dart
+ Future<bool> addJournal(Journal journal) async {
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      await supabase.from('journals').insert({
+        'title': journal.title,
+        'date': journal.date,
+        'content': journal.content,
+        'mood': journal.mood,
+        'user_id': userId,
+      });
+      await fetchJournals();
+      return true;
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal menambah data: $e',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white);
+      return false;
+    }
+  }
 ```
+menambah jurnal baru ke supabase. user_id dimasukan agar jurnal terhubung ke akun user yang sedang login. setelah insert berhasil, fetchJournals() dipanggil untuk memperbarui list di Home. Mengembalikan true jika berhasil, false jika gagal.
 
 ```dart
+Future<bool> updateJournal(String id, Journal journal) async {
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      await supabase.from('journals').update({
+        'title': journal.title,
+        'date': journal.date,
+        'content': journal.content,
+        'mood': journal.mood,
+      }).eq('id', id).eq('user_id', userId);
+      await fetchJournals();
+      return true;
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mengupdate data: $e',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white);
+      return false;
+    }
+  }
 ```
+kode di atas adalah untuk memperbarui jurnal yang sudah ada. .eq('id', id).eq('user_id', userId) memastikan hanya jurnal milik user tersebut yang bisa diupdate, sesuai Row Level Security di Supabase.
 
 ```dart
+ Future<bool> deleteJournal(String id) async {
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      await supabase.from('journals').delete()
+          .eq('id', id)
+          .eq('user_id', userId);
+      await fetchJournals();
+      return true;
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal menghapus data: $e',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white);
+      return false;
+    }
+  }
+}
 ```
+kode di atas adalah ntuk menghapus jurnal dari supabase. user_id disertakan untuk memastikan user hanya bisa menghapus jurnal miliknya sendiri.
 
+####  Package Screens: login_screen.dart
 ```dart
 ```
 
