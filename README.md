@@ -314,9 +314,30 @@ kode di atas adalah ntuk menghapus jurnal dari supabase. user_id disertakan untu
 
 ####  Package Screens: login_screen.dart
 ```dart
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../main.dart';
+import 'home_screen.dart';
+import 'register_screen.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  bool _isLoading = false;
+  bool _obscure = true;
 ```
+_formKey untuk mengontrol validasi form. _emailCtrl dan _passCtrl untuk mengambil nilai input email dan password. _isLoading untuk menampilkan loading saat proses login. _obscure untuk menyembunyikan/menampilkan password.
 
 ```dart
+
 ```
 
 ```dart
