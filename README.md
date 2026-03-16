@@ -1562,4 +1562,6 @@ child: SizedBox(
 ```
 pada kode di atas, onPressed: _isSaving ? null : _save menonaktifkan tombol saat proses berlangsung. elevation: 0 menghilangkan shadow bawaan tombol untuk tampilan flat. Teks tombol berubah antara "Update Journal" dan "Save Journal" sesuai isEdit. CircularProgressIndicator menggantikan teks saat proses simpan berlangsung memberikan feedback visual kepada user bahwa sistem sedang memproses.
 
-## Dokumentasi Aplikasi
+## Dokumentasi Aplikasi Daily Journal
+
+
