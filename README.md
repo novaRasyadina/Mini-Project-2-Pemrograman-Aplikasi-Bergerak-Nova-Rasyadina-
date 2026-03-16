@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-# Mini Project Pemrograman Aplikasi Bergerak
-
-=======
 # Mini Project 2 Pemrograman Aplikasi Bergerak 
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
+
 ## Deskripsi Aplikasi 
 Aplikasi Daily Jurnal atau Jurnal Harian ini dibuat untuk mencatat pikiran, perasaan, kejadian sehari-hari layaknya sebuah buku harian (diary)
 tetapi dalam bentuk digital. aplikasi ini dibuat dengan tampilan yang hangat dan mudah digunakan. pengguna dapat menambahkan jurnal baru setiap hari,
 melihat semua jurnal yang sudah dibuat sebelumnya, mengedit jurnal yang sudah ada, serta menghapus jurnal yang sudah tidak dibutuhkan dengan cara 
-<<<<<<< HEAD
-swipe jurnal ke arah kiri menggunakan kursor. setiap jurnal dilengkapi dengan tanggal, judul, isi tulisan panjang, dan pilihan mood berupa emoji.
-=======
 swipe jurnal ke arah kiri menggunakan kursor. setiap jurnal dilengkapi dengan tanggal, judul, isi tulisan panjang, dan pilihan mood berupa emoji. 
 Aplikasi ini juga dilengkapi dengan fitur tambahan yaitu register dan login yang apabila pengguna login kembali setelah beberapa lama meningkalkan aplikasi, data yang sebelumnya sudah dibuat masih tetap ada karena keterikatan akun, terdapat pula fitur untuk mengaktifkan tema dark yang menambah experience baru dan kenyamanan pengguna saat menggunakan aplikasi.
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
 
 ## Fitur Pada Aplikasi Daily Journal
 Fitur-fitur yang ada dalam aplikasi daily journal meliputi 
@@ -26,86 +18,10 @@ Fitur-fitur yang ada dalam aplikasi daily journal meliputi
 * Mood Tracker: Pengguna dapat memilih emoji berdasarkan suasana hati/mood saat menulis jurnal atau catatan harian
 * Tanggal: memilih ttanggal menggunakan kalender otomatis.
 * Snackbar Notifikasi: Memunculkan notifikasi konfirmasi hapus dengan GetX snackbar.
-<<<<<<< HEAD
-
-=======
 * light mode dan dark mode: pengguna dapat memilih mode di dalam aplikasi antara mode terang dan gelap.
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
 
 ## Widget Yang Digunakan 
 
-#### Widget Struktur & Layout:
-* GetMaterialApp sebagai root aplikasi dengan GetX
-<<<<<<< HEAD
-* Scaffold sebagai struktur dasar halaman (body, FAB)
-* SafeArea untuk mencega konten tertutup status bar
-=======
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
-* Column untuk menyusun widget secara vertikal
-* Row untuk menyusun widget secara horizontal
-* Expanded untuk mengisi sisa ruang yang tersedia
-* Spacer untuk mendorong widget ke ujung dalam Row/Column
-* SizedBox Memberikan jarak /ukuran tetap
-* padding menambahkan padding di sekeliling widget
-<<<<<<< HEAD
-* SingleChildScrollView membuat konten agar dapat di scroll
-
-#### Widget Tampilan:
-* Container yaitu widget dengan dekorasi warna, shadow, border radius.
-* Card yaitu kartu dengan shadow bawaan material
-* Text untuk menampilkan teks
-* Icon untuk menampilkan ikon material
-* Divider yaitu garis pemisah horizontal
-* AnimatedContainer yaitu container dengan animasi saat properti berubah(src=Blackbox AI ^_^)
-#### Widget Input
-* Form, yaitu Wrapper form dengan GlobalKey validasi
-* TextFormField untuk input teks dengan validator bawaan
-* TextEditingController untuk mengontrol dan membaca isi TextField
-* GlobalKey<FromState> yaitu kunci untuk mengakses state form (alidasi)
-* ShowDatePicker adalah dialog kalender bawaan dari flutter
-
-#### Widget Interaksi:
-* GestureDetector untuk mendeteksi gesture tap pada widget
-* Dismissible digunakan utnuk widget dihapus dengan swipe
-* FloatingActionButton.extended yaitu tombol aksi utama di pojok kanan bawah
-* ElevatedButton yaitu tombol dengan efek elevated (mengambang)
-* IconButton yaitu tombol berbentuk ikon
-* TextButton yaitu tombol teks(dipakai di snackbar UNDO)
-* ListView.Builder yaitu daftar item efisien
-* ListView adalah daftar item dengan scroll (dipakai mood selector)
-
-#### Widget GetX
-* Get.to() untuk Navigasi ke halaman baru
-* Get.back() untuk kembali ke halaman sebelumnya dan kirim hasil
-* Get.snackbar() untuk menampilkan notifikasi snackbar
-
-## Penjelasan Kode 
-```dart
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-void main() => runApp(const MyApp());
-
-// ── COLORS ──────────────────────────────────────────────
-const kBg     = Color(0xFFF5F0EB);
-const kDark   = Color(0xFF1A1A2E);
-const kAccent = Color(0xFFE07A5F); // terracotta
-const kCard   = Color(0xFFFFFFFF);
-const kMuted  = Color(0xFF9A9A9A);
-const kTag    = Color(0xFFFFF0EC);
-
-```
-Kode di atas merupakan packahe utama flutter yang menyediakan semua widget material dan wajib di import di setiap file flutter. kemudian package GetX yang digunakan untuk navigasi natar halaman dan menampilkan snackbar, selanjutnya adalah warna-warna yang digunakan di dalam aplikasi yang mengusung tema hangat dengan nuansa cream, coklat, putih, nav, dan teraccota.
-
-```dart
-class Journal {
-  String title, date, content, mood;
-  Journal({required this.title, required this.date, required this.content, this.mood = '😊'});
-}
-
-```
-journal adalah blueprint yang merepresentasikan satu masukan jurnal. setiap objek jurnal menyimpan empat data: title (judul), date (tanggal format YYYY-MM-DD), content (isi tulisan), dan mood (emoji suasana hati). Parameter title, date, dan content bersifat required artinya wajib diisi saat membuat objek baru. Sedangkan mood bersifat opsional dengan nilai default '😊' jika tidak diisi, otomatis menggunakan emoji senyum.
-=======
 #### Widget Tampilan:
 * Scaffold adalah struktur dasar setiap halaman (body, FAB)
 * SafeArea untuk menghindari area notch dan status bar  agar tidak tertutup
@@ -165,12 +81,10 @@ WidgetsFlutterBinding.ensureInitialized() berfungsi untuk memastikan flutter sud
 final supabase = Supabase.instance.client;
 ```
 variabel global yang dapat diakses dari semua file tanpa perlu import ulang setiap kali ingin menggunakan supabase.
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
 
 ```dart
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-<<<<<<< HEAD
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -216,7 +130,6 @@ void _delete(int i) {
       mainButton: TextButton(
         onPressed: () { setState(() => _list.insert(i, j)); Get.back(); },
         child: const Text('UNDO', style: TextStyle(color: kAccent, fontWeight: FontWeight.bold)),
-=======
 
   @override
   Widget build(BuildContext context) {
@@ -617,12 +530,10 @@ Tombol login dengan lebar penuh double.infinity dan tinggi 52px. onPressed: _isL
             ),
           ),
         ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
       ),
     );
   }
 ```
-<<<<<<< HEAD
 
 sebeum menghapus, item yang akan dihapus disimpan dulu ke variabel j. ini penting agar fitur UNDO bisa bekerja dan data tidak benar-benar hilang, hanya dipindah saja dari list, dan dapat dikembalikan jika pengguna tidak jadi menghapus nya. 
 
@@ -677,7 +588,7 @@ kode diatas adalah untuk membuat tanggal menjadi dapat dipilih secara mudah dan 
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _goToForm(),
         backgroundColor: kDark,
-=======
+```
 baris teks dibagian bawah yang mengajak user mendaftar jika belum memiliki akun. GestureDetector membungkus teks "Daftar" agar bisa diklik untuk navigasi ke RegisterScreen dengan animasi slide dari kanan ke kiri. mainAxisSize: MainAxisSize.min membuat Row hanya selebar kontennya saja.
 
 ```dart
@@ -1070,7 +981,6 @@ floatingActionButton: FloatingActionButton.extended(
     );
   }
 ```
-<<<<<<< HEAD
 Kode di atas yang dimulai dengan Expanded digunakan untuk menaruh list jurnal yang ditambahkan di tampilan apkikasi berbentuk kotak memanjang dengan sudut tumpul. kemudian kode yang dimulai dengan floatingActionButton tersebut digunakan untuk menaruh fitur tambahkan jurnal baru yang bertuliskan "Click Here".
 
 ```dart
@@ -1098,7 +1008,7 @@ Kode di atas yang dimulai dengan Expanded digunakan untuk menaruh list jurnal ya
       background: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(20)),
-=======
+```
 FloatingActionButton.extended di pojok kanan bawah dengan ikon pensil dan label tombol"Click Here". Saat ditekan navigasi ke FormScreen tanpa membawa data jurnal artinya mode tambah baru. transition: Transition.downToUp memberikan animasi slide dari bawah ke atas.
 ```dart
 void _showLogoutDialog(BuildContext context) {
@@ -1193,12 +1103,10 @@ Dismissible membungkus setiap kartu untuk fitur swipe-to-delete. key: ValueKey(j
           color: Colors.redAccent,
           borderRadius: BorderRadius.circular(20),
         ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 22),
         child: const Icon(Icons.delete_outline, color: Colors.white),
       ),
-<<<<<<< HEAD
       child: GestureDetector(
         onTap: () => _goToForm(j, i),
         child: Container(
@@ -1253,7 +1161,6 @@ Dismissible membungkus setiap kartu untuk fitur swipe-to-delete. key: ValueKey(j
               ]),
             ])),
           ]),
-=======
 ```
 Latar belakang merah dengan ikon tempat sampah yang terlihat saat user melakukan swipe ke kiri. alignment: Alignment.centerRight memposisikan ikon di kanan karena arah swipe dari kanan ke kiri.
 
@@ -1368,12 +1275,10 @@ Expanded(
               ),
             ],
           ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
         ),
       ),
     );
   }
-<<<<<<< HEAD
 }
 ```
 _empty() adalah widget yang ditampilkan ketika belum ada jurnal sama sekali, berisi ikon buku dan teks panduan. _card() adalah tampilan setiap penambahan jurnal dalam bentuk kartu. Kartu dibungkus Dismissible agar bisa dihapus dengan swipe ke kiri saat swipe, background merah dengan ikon tempat sampah akan terlihat, dan setelah animasi selesai _delete() dipanggil. Kartu juga dibungkus GestureDetector sehingga ketika di-tap, form edit terbuka.
@@ -1386,8 +1291,6 @@ class FormScreen extends StatefulWidget {
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
-
-=======
 ```
 Area konten card di sebelah kanan blok tanggal. Baris pertama menampilkan judul jurnal dan emoji mood secara berdampingan. maxLines: 1 dan overflow: TextOverflow.ellipsis memastikan judul tidak lebih dari satu baris dan menampilkan "..." jika terlalu panjang. di bawahnya preview dua baris isi jurnal dengan warna muted. paling bawah ada hint visual kecil yang memberi tahu user cara berinteraksi dengan kartu.
 
@@ -1434,12 +1337,10 @@ class FormScreen extends StatefulWidget {
 journal bersifat nullable (?). Jika null berarti halaman dibuka untuk tambah jurnal baru. Jika berisi data jurnal berarti untuk edit. dengan cara ini satu halaman digunakan untuk dua fungsi sekaligus yaitu Create dan Update.
 
 ```dart
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
 class _FormScreenState extends State<FormScreen> {
   final _form = GlobalKey<FormState>();
   late final TextEditingController _title, _date, _content;
   String _mood = '😊';
-<<<<<<< HEAD
 
   final _moods = ['😊','😢','😤','😴','🥰','😰','🤩','😌'];
 ```
@@ -1447,7 +1348,6 @@ FormScreen digunakan untuk dua keperluan sekaligus, yaitu menambah jurnal baru d
 
 ```dart
 @override
-=======
   bool _isSaving = false;
 
   final _moods = ['😊','😢','😤','😴','🥰','😰','🤩','😌'];
@@ -1459,7 +1359,6 @@ _form adalah kunci untuk mengakses state form dan menjalankan validasi semua fie
 
 ```dart
  @override
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
   void initState() {
     super.initState();
     final j = widget.journal;
@@ -1468,51 +1367,35 @@ _form adalah kunci untuk mengakses state form dan menjalankan validasi semua fie
     _content = TextEditingController(text: j?.content ?? '');
     _mood    = j?.mood ?? '😊';
   }
-<<<<<<< HEAD
-
-  @override
-=======
 ```
 initState() dipanggil sekali saat halaman pertama dibuat. Jika untuk edit semua field diisi dengan data jurnal yang ada menggunakan j?.title. jika untuk tambah baru semua field kosong karena ?? '' memberikan string kosong sebagai default.
 
 ```dart
 @override
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
   void dispose() {
     _title.dispose(); _date.dispose(); _content.dispose();
     super.dispose();
   }
 ```
-<<<<<<< HEAD
 initState() dipanggil sekali saat widget pertama dibuat. Di sini ketiga TextEditingController diinisialisasi, jika mode edit, controller diisi dengan data lama menggunakan operator ?. dan ??; jika mode tambah, diisi string kosong. dispose() wajib dipanggil saat widget dihancurkan untuk melepaskan memori yang dipakai controller. Tanpa ini, akan terjadi memory leak, yaitu kondisi di mana aplikasi tidka dapat mengembalikan memori yang tidak lagi digunakan, karena controller terus menempati memori walaupun layar sudah ditutup.
 
 ```dart
-  Future<void> _pickDate() async {
-=======
-dispose() wajib dipanggil karena berfungsi untuk membersihkan ketiga controller dari memori saat halaman ditutup untuk mencegah memory leak.
-
-```dart
 Future<void> _pickDate() async {
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
     final d = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       builder: (ctx, child) => Theme(
-<<<<<<< HEAD
         data: ThemeData.light().copyWith(colorScheme: const ColorScheme.light(primary: kDark)),
-=======
         data: Theme.of(ctx).copyWith(
           colorScheme: const ColorScheme.light(primary: Color(0xFF1A1A2E)),
         ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
         child: child!,
       ),
     );
     if (d != null) _date.text = d.toString().substring(0, 10);
   }
-<<<<<<< HEAD
 
   void _save() {
     if (!_form.currentState!.validate()) return;
@@ -1531,7 +1414,6 @@ _pickDate() membuka dialog kalender bawaan Flutter. Setelah user memilih tanggal
     final isEdit = widget.journal != null;
     return Scaffold(
       backgroundColor: kBg,
-=======
 ```
 showDatePicker() menampilkan dialog kalender bawaan Flutter. initialDate: DateTime.now() membuka kalender di tanggal hari ini. builder mengubah warna header kalender agar sesuai tema aplikasi. d.toString().substring(0, 10) mengambil hanya bagian YYYY-MM-DD dari string DateTime yang lengkap.
 
@@ -1621,7 +1503,6 @@ Variabel lokal di build(). isEdit menentukan mode halaman. isDark mengecek tema 
 ```dart
    return Scaffold(
       backgroundColor: bg,
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
       body: SafeArea(
         child: Column(children: [
           // ── BAR ATAS
@@ -1630,14 +1511,12 @@ Variabel lokal di build(). isEdit menentukan mode halaman. isDark mengecek tema 
             child: Row(children: [
               IconButton(
                 onPressed: () => Get.back(),
-<<<<<<< HEAD
                 icon: const Icon(Icons.close_rounded, color: kDark),
                 style: IconButton.styleFrom(backgroundColor: kCard, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
               ),
               const Spacer(),
               Text(isEdit ? 'Edit Journal' : 'New Journal',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kDark)),
-=======
                 icon: const Icon(Icons.close_rounded),
                 style: IconButton.styleFrom(
                   foregroundColor: isDark ? Colors.white : const Color(0xFF1A1A2E),
@@ -1655,137 +1534,14 @@ Variabel lokal di build(). isEdit menentukan mode halaman. isDark mengecek tema 
                   color: kDark,
                 ),
               ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
               const Spacer(),
               const SizedBox(width: 48),
             ]),
           ),
-<<<<<<< HEAD
 
           Expanded(
-=======
 ```
 iini adalah bagian topbar halaman form atau bagian atas halaman form (pengissian jurnal). tombol close di kiri untuk kembali ke home menggunakan Get.back(). judul di tengah berubah antara "Edit Journal" dan "New Journal" sesuai isEdit. SizedBox(width: 48) di kanan menyeimbangkan lebar tombol close agar judul benar-benar berada di tengah. Spacer() mendorong elemen ke tepi kiri dan kanan.
-
-`Expanded(
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-              child: Form(
-                key: _form,
-<<<<<<< HEAD
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                  // ── MOOD
-                  const Text('How are you feeling?',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: kMuted, letterSpacing: 0.4)),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 50,
-                    child: ListView(scrollDirection: Axis.horizontal, children: _moods.map((m) {
-                      final sel = m == _mood;
-                      return GestureDetector(
-                        onTap: () => setState(() => _mood = m),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 180),
-                          margin: const EdgeInsets.only(right: 8),
-                          width: 50, height: 50,
-                          decoration: BoxDecoration(
-                            color: sel ? kDark : kCard,
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6)],
-                          ),
-                          child: Center(child: Text(m, style: const TextStyle(fontSize: 22))),
-                        ),
-                      );
-                    }).toList()),
-                  ),
-                  const SizedBox(height: 22),
-
-                  // ── TANGGAL
-                  GestureDetector(
-                    onTap: _pickDate,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      decoration: BoxDecoration(color: kCard, borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8)]),
-                      child: Row(children: [
-                        const Icon(Icons.calendar_today_outlined, size: 18, color: kAccent),
-                        const SizedBox(width: 12),
-                        Expanded(child: TextFormField(
-                          controller: _date,
-                          enabled: false,
-                          decoration: const InputDecoration(
-                            hintText: 'Select date', border: InputBorder.none,
-                            isDense: true, contentPadding: EdgeInsets.zero,
-                            hintStyle: TextStyle(color: kMuted),
-                          ),
-                          style: const TextStyle(fontWeight: FontWeight.w600, color: kDark),
-                          validator: (v) => v!.isEmpty ? 'Pick a date' : null,
-                        )),
-                        const Icon(Icons.chevron_right, color: kMuted, size: 18),
-                      ]),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // ── JUDUL
-                  TextFormField(
-                    controller: _title,
-                    style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: kDark, letterSpacing: -0.8, height: 1.2),
-                    decoration: const InputDecoration(
-                      hintText: 'Title...', border: InputBorder.none,
-                      isDense: true, contentPadding: EdgeInsets.zero,
-                      hintStyle: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Color(0xFFCCCCCC), letterSpacing: -0.8),
-                    ),
-                    validator: (v) => v!.isEmpty ? 'Add a title' : null,
-                    maxLines: null,
-                  ),
-                  const SizedBox(height: 12),
-                  Divider(color: Colors.black.withOpacity(0.07)),
-                  const SizedBox(height: 12),
-
-                  // ── CONTENT
-                  TextFormField(
-                    controller: _content,
-                    style: const TextStyle(fontSize: 15, color: Color(0xFF3C3C3E), height: 1.8),
-                    decoration: const InputDecoration(
-                      hintText: "What's on your mind today?\n\nWrite freely — this is your space...  -nov",
-                      border: InputBorder.none, isDense: true, contentPadding: EdgeInsets.zero,
-                      hintStyle: TextStyle(fontSize: 15, color: Color(0xFFBBBBBB), height: 1.8),
-                    ),
-                    maxLines: null, minLines: 10,
-                    keyboardType: TextInputType.multiline,
-                    validator: (v) => v!.isEmpty ? 'Write something' : null,
-                  ),
-                ]),
-              ),
-            ),
-          ),
-
-          // ── SAVE BUTTON(SIMPAN)
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 16, offset: const Offset(0, -4))],
-            ),
-            padding: EdgeInsets.fromLTRB(20, 12, 20, MediaQuery.of(context).padding.bottom + 12),
-            child: SizedBox(
-              width: double.infinity, height: 52,
-              child: ElevatedButton(
-                onPressed: _save,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: kDark, foregroundColor: Colors.white, elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-                child: Text(isEdit ? 'Update Journal' : 'Save Journal',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-=======
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-```
-Expanded membuat area form mengisi sisa ruang layar di antara top bar dan tombol simpan, kemudian SingleChildScrollView yang memungkinkan konten di-scroll jika terlalu panjang terutama saat keyboard muncul, form membungkus semua field dengan key: _form agar bisa divalidasi sekaligus.
 
 ```dart
 // ── MOOD DENGAN EMOT
@@ -2008,7 +1764,6 @@ child: SizedBox(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
               ),
             ),
           ),
@@ -2016,27 +1771,6 @@ child: SizedBox(
       ),
     );
 ```
-<<<<<<< HEAD
-Kode di atas adalah bagian build() dari FormScreen, yaitu layar untuk menambah atau mengedit jurnal. Variabel isEdit dibuat di awal untuk menentukan mode layar yang nilainya true jika sedang mengedit, false jika tambah baru. Variabel ini digunakan untuk mengubah judul halaman dan teks tombol simpan tanpa perlu membuat dua layar terpisah. Struktur layar dibagi menjadi tiga bagian. Top bar berisi tombol X untuk kembali tanpa menyimpan dan judul halaman di tengah. Konten form dibungkus SingleChildScrollView agar bisa di scroll ketika keyboard muncul. Tombol simpan diletakkan di luar scroll area agar selalu terlihat di bagian bawah layar. Di dalam form terdapat empat input. Mood selector menampilkan deretan emoji horizontal, nantinya emoji yang dipilih berubah warna dengan animasi 180ms. TextField tanggal di-set enabled, false sehingga pengisian hanya bisa dilakukan lewat date picker. TextField judul menggunakan font besar agar terasa seperti menulis judul buku harian. TextField isi jurnal memiliki tinggi minimalnya 10 baris dan bisa terus membesar sesuai panjang tulisan. Ketiga TextFormField memiliki validator masing-masing. Jika ada field yang kosong saat tombol ditekan, pesan error akan muncul. Jika semua terisi, fungsi _save() dipanggil untuk mengirim data kembali ke HomeScreen.
-
-## Dokumentasi Aplikasi Daily Journal
-<img width="959" height="913" alt="{DEEB6FE8-D83C-4749-9A72-F1B49D37A97B}" src="https://github.com/user-attachments/assets/b18b041c-4c79-4a1c-bb46-740146a91dd5" />
-
-<img width="957" height="910" alt="{19F4362C-DCE2-4B62-B44A-AFAA70731FF9}" src="https://github.com/user-attachments/assets/01edaee4-02ba-45fe-bbf1-42091a0288eb" />
-
-<img width="961" height="912" alt="{5C671502-A25A-423A-89F9-B2AD049AC2CF}" src="https://github.com/user-attachments/assets/3c730969-aca5-4873-84a5-125f9b7bb88a" />
-
-<img width="956" height="913" alt="{8ECF4A2F-E1B2-44FF-9D26-9E821EB2C1AB}" src="https://github.com/user-attachments/assets/4fa7703a-0b30-4658-9337-93f2b4b384ba" />
-
-<img width="956" height="915" alt="{5527524E-F488-411E-B7BE-21AF820C927B}" src="https://github.com/user-attachments/assets/15c24a9f-1371-40f6-975b-2804d6dec672" />
-
-<img width="960" height="913" alt="{11E8F4A5-8A52-447A-8FCD-5D71BD98ECB4}" src="https://github.com/user-attachments/assets/378d00a7-b439-4b7f-a235-83a1ada732a1" />
-
-<img width="960" height="912" alt="{B9CC1A24-2BFC-4670-8C7B-8564921077FA}" src="https://github.com/user-attachments/assets/8f6882e9-363a-414d-8903-edb0104fe800" />
-
- <img width="958" height="915" alt="{3F168C5C-4866-4362-A8CD-CE0289B02A18}" src="https://github.com/user-attachments/assets/dedb012f-e0ec-4a2a-ae54-85a22ce04466" />
- 
-=======
 pada kode di atas, onPressed: _isSaving ? null : _save menonaktifkan tombol saat proses berlangsung. elevation: 0 menghilangkan shadow bawaan tombol untuk tampilan flat. Teks tombol berubah antara "Update Journal" dan "Save Journal" sesuai isEdit. CircularProgressIndicator menggantikan teks saat proses simpan berlangsung memberikan feedback visual kepada user bahwa sistem sedang memproses.
 
 ## Dokumentasi Aplikasi Daily Journal
@@ -2070,4 +1804,3 @@ pada kode di atas, onPressed: _isSaving ? null : _save menonaktifkan tombol saat
 ![image alt](https://github.com/novaRasyadina/Mini-Project-2-Pemrograman-Aplikasi-Bergerak-Nova-Rasyadina-/blob/4b16202e0a9552ecd567f5ec89c82098113c9468/%7B7C9582B5-E21F-4BA8-94AC-3D65AE6DDE08%7D.png)
 
 ![image alt](https://github.com/novaRasyadina/Mini-Project-2-Pemrograman-Aplikasi-Bergerak-Nova-Rasyadina-/blob/813b8fd464dbda3af519fddff308df113f755faf/%7B6DCB9FC2-863C-4745-883C-AE5553D4837C%7D.png)
->>>>>>> e262d1bb160834c2f290fc643e4e99e8cede3522
