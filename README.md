@@ -882,12 +882,12 @@ floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFF1A1A2E),
         foregroundColor: Colors.white,
         icon: const Icon(Icons.edit_outlined),
-        label: const Text('New Journal', style: TextStyle(fontWeight: FontWeight.w700)),
+        label: const Text('Click Here', style: TextStyle(fontWeight: FontWeight.w700)),
       ),
     );
   }
 ```
-FloatingActionButton.extended di pojok kanan bawah dengan ikon pensil dan label "New Journal". Saat ditekan navigasi ke FormScreen tanpa membawa data jurnal artinya mode tambah baru. transition: Transition.downToUp memberikan animasi slide dari bawah ke atas.
+FloatingActionButton.extended di pojok kanan bawah dengan ikon pensil dan label tombol"Click Here". Saat ditekan navigasi ke FormScreen tanpa membawa data jurnal artinya mode tambah baru. transition: Transition.downToUp memberikan animasi slide dari bawah ke atas.
 ```dart
 void _showLogoutDialog(BuildContext context) {
     Get.dialog(
