@@ -1580,3 +1580,5 @@ pada kode di atas, onPressed: _isSaving ? null : _save menonaktifkan tombol saat
 ![image alt](https://github.com/novaRasyadina/Mini-Project-2-Pemrograman-Aplikasi-Bergerak-Nova-Rasyadina-/blob/0197bb06ae02e3e408dee8feb9a78ef145ff2f9c/%7B713EAA73-DAF8-4BF8-8468-A87CC620B471%7D.png)
 
 ![image alt](https://github.com/novaRasyadina/Mini-Project-2-Pemrograman-Aplikasi-Bergerak-Nova-Rasyadina-/blob/fa08488f3b0079b4d335f84a51b44a6266074349/%7B3A3D095F-F55F-4787-9814-71FA24924B08%7D.png)
+
+![image alt](https://github.com/novaRasyadina/Mini-Project-2-Pemrograman-Aplikasi-Bergerak-Nova-Rasyadina-/blob/9e9321156963da59227c19cb0db5465a688b238f/%7B53B00274-B957-4633-80F1-55231FEBCFE1%7D.png)
