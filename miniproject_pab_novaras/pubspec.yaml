@@ -1,20 +1,26 @@
-name: miniproject_pab_novaras
-description: "A new Flutter project."
+name: daily_journal
+description: Daily Journal Dengan Supabase
+
 publish_to: 'none'
-version: 0.1.0+1
+
+version: 2.0.0+1
 
 environment:
-  sdk: ^3.11.0
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.6
+  supabase_flutter: ^2.3.4
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env
