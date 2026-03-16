@@ -85,51 +85,6 @@ variabel global yang dapat diakses dari semua file tanpa perlu import ulang seti
 ```dart
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Daily Journal',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, fontFamily: 'serif'),
-      home: const HomeScreen(),
-    );
-  }
-}
-```
-MyApp menggunkan StatlessWidget karena tidak memiliki data yang berubah yang artinya hanya bertugas mengatur konfigurasi awal. GetMaterialApp digunakan sebagai pengganti MaterialApp biasa agar semua fitur GetX bisa berfungsi di seluruh aplikasi. debugShowCheckedModeBanner: false menyembunyikan banner merah "DEBUG" di pojok layar. Font serif dipilih agar tampilan terasa seperti menulis di buku harian sungguhan, dan home: HomeScreen() menentukan halaman pertama yang dibuka saat aplikasi dijalankan.
-
-```dart
-class _HomeScreenState extends State<HomeScreen> {
-  final List<Journal> _list = [];
-
-  void _goToForm([Journal? j, int? i]) async {
-    final res = await Get.to(
-      () => FormScreen(journal: j, index: i),
-      transition: Transition.downToUp,
-    );
-    if (res is Map) {
-      setState(() {
-        if (res['update'] == true) _list[res['i']] = res['j'];
-        else _list.insert(0, res['j']);
-      });
-    }
-  }
-```
-HomeScreen menggunakan StatefulWidget karena daftar jurnal (_list) bisa berubah sewaktu-waktu akibat aksi tambah, edit, atau hapus — dan setiap perubahan harus membuat UI ikut diperbarui. _list adalah List<Journal> yang dimulai kosong, menjadi tempat penyimpanan semua entri jurnal selama aplikasi berjalan. selanjutnya erdapat fungsi yang menangani dua kondisi sekaligus yaitu 
-menambah jurnal baru dan mengedit jurnal lama. [Journal? j, int? i] yang berarti opsional, jika dipanggil tanpa argumen maka mode tambah baru, jika dipanggil dengan data jurnal dan index-nya maka mode edit. await Get.to() membuka FormScreen dan menunggu hasilnya setelah layar ditutup. Jika user menyimpan data, result berisi Map yang diterima sebagai res. Lalu setState() dipanggil untuk memperbarui UI jika mode update, data lama diganti di index yang sama; jika mode tambah, data baru disisipkan di posisi paling atas list.
-
-```dart
-void _delete(int i) {
-    final j = _list[i];
-    setState(() => _list.removeAt(i));
-    Get.snackbar('Deleted', j.title,
-      backgroundColor: kDark, colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(12),
-      borderRadius: 14,
-      mainButton: TextButton(
-        onPressed: () { setState(() => _list.insert(i, j)); Get.back(); },
-        child: const Text('UNDO', style: TextStyle(color: kAccent, fontWeight: FontWeight.bold)),
 
   @override
   Widget build(BuildContext context) {
